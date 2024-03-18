@@ -2,7 +2,7 @@ require 'rspec'
 require 'rails_helper'
 
 RSpec.describe RMT::Downloader::Stats do
-  subject(stats) { described_class.new }
+  subject(:stats) { described_class.new }
 
   describe '#initialize' do
     it 'initializes files_count to 0' do
