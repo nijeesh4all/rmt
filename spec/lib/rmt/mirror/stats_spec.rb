@@ -2,7 +2,7 @@ require 'rspec'
 require 'rails_helper'
 
 RSpec.describe RMT::Mirror::Stats do
-  subject(stats) { described_class.new }
+  subject(:stats) { described_class.new }
 
   describe '#initialize' do
     context 'with default arguments' do
