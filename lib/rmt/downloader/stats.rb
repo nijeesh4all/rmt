@@ -2,8 +2,11 @@ class RMT::Downloader::Stats
   attr_reader :total_size, :files_count
 
   def initialize
+    # ensure thread-safe access to the `@total_size` and `@files_count` counters.
+    # Since the calling method for these counters could potentially run in multiple threads concurrently
     @total_size_mutex = Mutex.new
     @files_count_mutex = Mutex.new
+
     @total_size = 0
     @files_count = 0
   end
