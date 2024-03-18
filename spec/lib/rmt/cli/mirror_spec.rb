@@ -62,9 +62,10 @@ RSpec.describe RMT::CLI::Mirror do
         expect_any_instance_of(RMT::Mirror).to receive(:mirror)
 
         Timecop.freeze(Time.utc(2018)) do
+          output_string = '\e[32m Mirroring complete. \e[0m'
           expect { command }
             .to change { repository.reload.last_mirrored_at }.to(Time.now.utc)
-            .and output(/\e\[32mMirroring complete.\e\[0m/).to_stdout
+            .and output { match(output_string) }.to_stdout
         end
       end
 
@@ -86,6 +87,13 @@ RSpec.describe RMT::CLI::Mirror do
             .and output(error_log).to_stdout
             .and output(exit_with_error_message).to_stderr
         end
+      end
+
+      it 'resets the stats before starts mirroring' do
+        stub_request(:any, /suse.com/).to_return(status: 200, body: '', headers: {})
+
+        expect_any_instance_of(RMT::Mirror::Stats).to receive(:reset!)
+        command
       end
     end
 
